@@ -23,10 +23,14 @@ class PXDetector():
         self.video_url =  'rstp://'+usr+':'+pwd+'@'+host+'/'+video
         
 
+    def get_still(self):
+        rsp=requests.get(self.still_url, auth=HTTPDigestAuth(self.usr, self.pwd))
+        return rsp.content
+
     def get_frame(self):
         #Grab a still frame
-        rsp=requests.get(self.still_url, auth=HTTPDigestAuth(self.usr, self.pwd))
-        frame = np.asarray(bytearray(rsp.content), dtype="uint8")
+        frame = self.get_still()
+        frame = np.asarray(bytearray(frame), dtype="uint8")
         frame = cv2.imdecode(frame, cv2.IMREAD_COLOR)
         return frame
 
@@ -67,6 +71,8 @@ class PXDetector():
                 detection = True
                 now = datetime.datetime.now()
                 cv2.imwrite('motion_latest.jpg',frame)
+            
+            if detection:
                 return now
 
         return None
