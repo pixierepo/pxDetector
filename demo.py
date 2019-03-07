@@ -11,7 +11,7 @@ r=requests.post(motion_url,json=payload).json()
 print(r) 
 
 #Grab still image:
-r=requests.post('http://localhost:5000/get_frame') #Returns image as part of response.
+r=requests.post(frame_url) #Returns image as part of response.
 with open("test.jpg","wb") as f:
 	f.write(r.content)
 	f.close()
